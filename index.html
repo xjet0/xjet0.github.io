@@ -2,322 +2,178 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>JetX‑style Crash Demo</title>
+  <title>JetX‑style Crash Demo (équilibré)</title>
   <style>
-    :root{
-      --bg:#0b1020; --card:#121832; --muted:#9aa4c7; --text:#e9edff; --accent:#7aa2ff; --good:#4ade80; --warn:#facc15; --bad:#fb7185; --purple:#c084fc;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Noto Sans",sans-serif;
-      color:var(--text);
-      background: radial-gradient(1200px 600px at 20% 10%, #1b2150 0%, #0b1020 55%, #070a16 100%);
-      display:flex; align-items:center; justify-content:center; padding:20px;
-    }
-    .app{width:min(1100px,100%);}
-    .grid{display:grid; grid-template-columns:1.2fr 1fr; gap:18px}
-    @media (max-width: 960px){ .grid{grid-template-columns:1fr;}}
-    .card{background:linear-gradient(180deg,#121832 0%, #0f1530 100%); border:1px solid #20274f; border-radius:18px; box-shadow:0 10px 30px rgba(0,0,0,.35)}
-    .card h2{margin:0 0 10px; font-size:20px; color:#ced6ff}
-    .pane{padding:18px}
-    .topbar{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px}
-    .brand{font-weight:700; letter-spacing:.4px}
-    .muted{color:var(--muted)}/* Arena */
-.arena{position:relative; height:420px; overflow:hidden; border-radius:16px; background:
-  radial-gradient(900px 220px at 70% 120%, rgba(122,162,255,.25), transparent 60%),
-  radial-gradient(700px 250px at 30% -30%, rgba(192,132,252,.20), transparent 60%),
-  linear-gradient(180deg, #0e1430 0%, #0a0f25 100%);
-}
-.ground{position:absolute; inset:auto 0 0 0; height:48px; background:linear-gradient(180deg,#10163a,#0b1028); border-top:1px solid #1b2454}
-.mult{position:absolute; left:18px; top:16px; font-weight:800; font-size:42px; letter-spacing:.5px; text-shadow:0 10px 30px rgba(0,0,0,.5)}
-.status{position:absolute; right:16px; top:16px; font-weight:600}
-.status.play{color:var(--warn)}
-.status.crash{color:var(--bad)}
-.status.cashed{color:var(--good)}
-
-/* Rocket */
-.rocket{position:absolute; left:50%; transform:translateX(-50%); width:56px; height:56px; will-change:transform, filter}
-.trail{position:absolute; left:50%; bottom:0; width:4px; transform:translateX(-50%); background:linear-gradient(180deg, rgba(250,204,21,.95), rgba(250,204,21,.05)); box-shadow:0 0 18px rgba(250,204,21,.65); border-radius:2px;}
-
-/* Controls */
-.controls{display:grid; grid-template-columns:1fr 1fr; gap:12px}
-.row{display:flex; gap:10px; align-items:center}
-label{font-size:13px; color:#b8c2ef}
-input[type="number"], input[type="text"]{
-  width:100%; padding:10px 12px; border-radius:12px; background:#0e1430; border:1px solid #20274f; color:#e9edff; outline:none;
-}
-input[type="checkbox"]{transform:translateY(1px)}
-.btn{appearance:none; border:none; border-radius:14px; padding:12px 14px; font-weight:700; cursor:pointer; background:#182049; color:#e9edff; border:1px solid #24306b; transition:transform .05s ease, filter .15s ease}
-.btn:hover{filter:brightness(1.08)}
-.btn:active{transform:translateY(1px)}
-.btn.primary{background:linear-gradient(180deg,#6e8cff,#4b6bff); border:1px solid #6f86ff}
-.btn.good{background:linear-gradient(180deg,#34d399,#22c55e); border:1px solid #37d193}
-.btn.warn{background:linear-gradient(180deg,#facc15,#eab308); color:#111827}
-.btn.ghost{background:#0f1530}
-.btn[disabled]{opacity:.5; cursor:not-allowed}
-
-.stats{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px}
-.tile{padding:12px 14px; background:#0e1430; border:1px solid #20274f; border-radius:14px}
-.tile .val{font-weight:800; font-size:20px}
-
-.history{display:flex; flex-wrap:wrap; gap:8px; margin-top:8px}
-.chip{padding:6px 10px; border-radius:999px; font-weight:700; font-size:13px; border:1px solid #223169; background:#0b1235}
-.chip.g{color:var(--good); border-color:rgba(74,222,128,.4)}
-.chip.p{color:var(--purple); border-color:rgba(192,132,252,.45)}
-.chip.r{color:var(--bad); border-color:rgba(251,113,133,.45)}
-
-.foot{display:flex; align-items:center; justify-content:space-between; padding:14px; border-top:1px dashed #20274f; font-size:13px; color:#aab3db}
-a{color:#9bb4ff; text-decoration:none}
-
+    body{margin:0;font-family:sans-serif;background:#0b1020;color:#e9edff;display:flex;align-items:center;justify-content:center;height:100vh}
+    .app{width:100%;max-width:600px;text-align:center}
+    .arena{background:#121832;padding:20px;border-radius:12px;margin-bottom:20px;position:relative;height:200px}
+    #mult{font-size:40px;font-weight:bold}
+    .status{margin-top:10px}
+    .controls{display:flex;justify-content:center;gap:10px;margin-top:10px}
+    button{padding:10px 14px;border:none;border-radius:8px;cursor:pointer;font-weight:bold}
+    .primary{background:#4b6bff;color:#fff}
+    .good{background:#22c55e;color:#fff}
+    .ghost{background:#374151;color:#fff}
+    .history{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;justify-content:center}
+    .chip{padding:4px 8px;border-radius:999px;font-size:13px}
+    .g{background:#064e3b;color:#4ade80}
+    .r{background:#581c1c;color:#fb7185}
   </style>
 </head>
 <body>
   <div class="app">
-    <div class="topbar">
-      <div class="brand">🚀 JetX‑style Crash <span class="muted">(démo hors‑argent)</span></div>
-      <div class="muted">HTML • CSS • JS — single file</div>
-    </div><div class="grid">
-  <!-- LEFT: Arena -->
-  <div class="card">
-    <div class="pane">
-      <h2>Arène</h2>
+    <div class="arena">
+      <div id="mult">1.00×</div>
+      <div class="status" id="status">Prêt</div>
     </div>
-    <div class="arena" id="arena">
-      <div class="mult" id="mult">1.00×</div>
-      <div class="status muted" id="status">Prêt</div>
-      <svg class="rocket" id="rocket" viewBox="0 0 64 64" aria-hidden="true">
-        <!-- Simple rocket SVG -->
-        <defs>
-          <linearGradient id="rg" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#9bb4ff"/>
-            <stop offset="100%" stop-color="#5e7bff"/>
-          </linearGradient>
-          <linearGradient id="fg" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#fbbf24"/>
-            <stop offset="100%" stop-color="#f59e0b"/>
-          </linearGradient>
-        </defs>
-        <g>
-          <path d="M32 4c8 6 12 16 12 24 0 10-12 28-12 28S20 38 20 28c0-8 4-18 12-24z" fill="url(#rg)" stroke="#2a3a7a" stroke-width="2"/>
-          <circle cx="32" cy="24" r="5" fill="#0e1430" stroke="#2a3a7a" stroke-width="2"/>
-          <path d="M24 38l-6 6 10 2z" fill="#6b7280"/>
-          <path d="M40 38l6 6-10 2z" fill="#6b7280"/>
-          <path id="flame" d="M32 56c-5-2-6-6-6-8 3 2 6 2 6 2s3 0 6-2c0 2-1 6-6 8z" fill="url(#fg)"/>
-        </g>
-      </svg>
-      <div class="trail" id="trail" style="height:0"></div>
-      <div class="ground"></div>
+    <div>
+      Solde : <span id="balance">1000</span> ⚪︎
     </div>
-    <div class="foot">💡 Retire avant le crash. Démo visuelle, <b>sans</b> argent réel.</div>
-  </div>
-
-  <!-- RIGHT: Controls -->
-  <div class="card">
-    <div class="pane">
-      <h2>Contrôles</h2>
-      <div class="controls">
-        <div class="tile">
-          <div class="row" style="margin-bottom:8px">
-            <label for="stake" style="min-width:90px">Mise (⚪︎)</label>
-            <input id="stake" type="number" min="1" step="1" value="50" />
-          </div>
-          <div class="row">
-            <label for="auto">Auto cash‑out</label>
-            <input id="auto" type="checkbox" />
-            <input id="autoAt" type="number" min="1" step="0.1" value="2" style="max-width:120px" />
-          </div>
-          <div class="row" style="margin-top:10px; gap:12px">
-            <button class="btn primary" id="startBtn">▶️ Lancer le round</button>
-            <button class="btn good" id="cashBtn" disabled>💸 Retirer</button>
-            <button class="btn ghost" id="resetBtn">↺ Reset</button>
-          </div>
-        </div>
-
-        <div class="tile">
-          <div class="muted" style="margin-bottom:6px">Solde</div>
-          <div class="val" id="balance">1000 ⚪︎</div>
-          <div class="stats">
-            <div class="tile">
-              <div class="muted">État du round</div>
-              <div class="val" id="roundState">Prêt</div>
-            </div>
-            <div class="tile">
-              <div class="muted">Crash prévu</div>
-              <div class="val" id="crashAt">—</div>
-            </div>
-          </div>
-          <div style="margin-top:10px" class="muted">Historique (10 derniers)</div>
-          <div class="history" id="history"></div>
-        </div>
-      </div>
+    <div class="controls">
+      <input id="stake" type="number" value="50" min="1" style="width:80px" />
+      <button class="primary" id="startBtn">▶️ Lancer</button>
+      <button class="good" id="cashBtn" disabled>💸 Retirer</button>
+      <button class="ghost" id="resetBtn">↺ Reset</button>
     </div>
-  </div>
-</div>
-
-<div style="margin-top:10px" class="muted">Astuce : active l’auto cash‑out à 1.5×–2× pour limiter les busts. Ceci est un prototype éducatif.</div>
-
+    <div class="history" id="history"></div>
   </div>  <script>
-    // ===== Utilities =====
-    const $ = (sel) => document.querySelector(sel);
-    const fmt = (x) => Number(x).toFixed(2);
+    const multEl = document.getElementById('mult');
+    const statusEl = document.getElementById('status');
+    const stakeEl = document.getElementById('stake');
+    const startBtn = document.getElementById('startBtn');
+    const cashBtn = document.getElementById('cashBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const balanceEl = document.getElementById('balance');
+    const historyEl = document.getElementById('history');
 
-    // Seeded RNG (Mulberry32) for reproducible rounds within a session
-    function mulberry32(a){return function(){let t=a+=0x6D2B79F5;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return ((t^t>>>14)>>>0)/4294967296}}
-    let seed = (crypto.getRandomValues(new Uint32Array(1))[0]) >>> 0;
-    let rng = mulberry32(seed);
-
-    // Heavy‑tail crash distribution: X has tail ~ x^{-lambda} for x>=1
-    function sampleCrash(lambda=1){
-      const r = Math.min(0.999999, Math.max(0.000001, rng()));
-      const x = Math.exp(-Math.log(1 - r) / lambda); // inverse CDF of Pareto‑like
-      const capped = Math.min(100, x); // cap to 100× for UI sanity
-      return Math.max(1.0, capped);
-    }
-
-    // ===== Elements =====
-    const multEl = $('#mult');
-    const statusEl = $('#status');
-    const rocketEl = $('#rocket');
-    const trailEl = $('#trail');
-    const stakeEl = $('#stake');
-    const autoEl = $('#auto');
-    const autoAtEl = $('#autoAt');
-    const startBtn = $('#startBtn');
-    const cashBtn = $('#cashBtn');
-    const resetBtn = $('#resetBtn');
-    const balanceEl = $('#balance');
-    const crashAtEl = $('#crashAt');
-    const roundStateEl = $('#roundState');
-    const historyEl = $('#history');
-    const arenaEl = $('#arena');
-
-    // ===== State =====
-    let balance = 1000;
-    let round = 0;
+    let balance = 1000; const BASE_BALANCE = balance;
     let inRound = false, crashed = false, cashed = false;
     let currentMult = 1.0;
-    let crashPoint = null;
-    let startedAt = 0;
-    let raf = null;
+    let crashPoint = 0;
+    let raf;
 
-    // speed: controls how fast the multiplier grows (per second)
-    const SPEED = 1.15; // exp(SPEED * t)
+    // Nouvel algo: plusieurs petits gains consécutifs, puis un gros crash pour piéger l'user
+    // --- Logic améliorée: état de marché avec petites victoires, puis perte marquée ---
+    let state = 'SAFE';
+    let safeStreak = 0;
+    let plannedKillIn = 3; // nombre de rounds avant un kill
+    const PROFIT_CAP = 150; // si (balance - BASE_BALANCE) dépasse, on resserre
 
-    function updateBalance(){ balanceEl.textContent = `${Math.max(0, Math.round(balance))} ⚪︎`; }
-    function setStatus(txt, cls){ statusEl.textContent = txt; statusEl.className = `status ${cls||''}`; roundStateEl.textContent = txt; }
-    function setMult(x){ currentMult = x; multEl.textContent = `${fmt(x)}×`; }
+    function rand(a,b){ return a + Math.random()*(b-a); }
+
+    function nextCrashPoint(){
+      const profit = balance - BASE_BALANCE;
+
+      // Profit guard: trop de bénéfices => crashs serrés pendant un moment
+      if (profit > PROFIT_CAP){
+        state = 'KILL';
+        plannedKillIn = 1; // kill immédiat
+      }
+
+      // Transition simple d'état
+      if (state === 'SAFE'){
+        safeStreak++;
+        // Rounds faciles: fenêtre 1.20x–2.10x
+        const c = rand(1.20, 2.10);
+        if (safeStreak >= plannedKillIn){
+          state = 'KILL';
+        }
+        return c;
+      }
+
+      if (state === 'KILL'){
+        // Kill round: bust quasi instantané 1.00x–1.10x
+        const c = rand(1.00, 1.10);
+        state = 'RECOVERY';
+        safeStreak = 0;
+        // Après un kill, on replanifie un nouveau cycle 2–4 safe
+        plannedKillIn = Math.floor(rand(2, 4.99));
+        return c;
+      }
+
+      // RECOVERY / NEUTRAL: un peu plus haut pour redonner confiance
+      // 1.40x–2.80x, puis retour à SAFE
+      if (state === 'RECOVERY'){
+        const c = rand(1.40, 2.80);
+        state = 'SAFE';
+        return c;
+      }
+
+      // Fallback
+      return rand(1.20, 2.00);
+    } else {
+        // Autres tours: crash plus haut (user peut souvent gagner)
+        return 2 + Math.random()*4; // crash entre 2× et 6×
+      }
+    }
+
+    function setMult(x){
+      currentMult = x;
+      multEl.textContent = x.toFixed(2)+'×';
+    }
 
     function pushHistory(x){
-      const chip = document.createElement('div');
-      chip.className = 'chip ' + (x>=10? 'p' : x>=2? 'g' : 'r');
-      chip.textContent = `${fmt(x)}×`;
+      const chip=document.createElement('div');
+      chip.className='chip '+(x>=2?'g':'r');
+      chip.textContent=x.toFixed(2)+'×';
       historyEl.prepend(chip);
-      while (historyEl.children.length > 10) historyEl.removeChild(historyEl.lastChild);
+      while(historyEl.children.length>10)historyEl.removeChild(historyEl.lastChild);
     }
-
-    // Simple crash beep using Web Audio
-    function beepCrash(){
-      const ctx = new (window.AudioContext||window.webkitAudioContext)();
-      const o = ctx.createOscillator();
-      const g = ctx.createGain();
-      o.type = 'sawtooth'; o.frequency.value = 120;
-      g.gain.setValueAtTime(0.001, ctx.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.3, ctx.currentTime + 0.02);
-      g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.25);
-      o.connect(g).connect(ctx.destination); o.start(); o.stop(ctx.currentTime + 0.26);
-    }
-
-    function lockControls(lock){
-      stakeEl.disabled = lock; autoEl.disabled = lock; autoAtEl.disabled = lock && autoEl.checked; cashBtn.disabled = !lock; startBtn.disabled = lock;
-    }
-
-    function placeBet(){
-      const stake = Math.max(1, Math.floor(Number(stakeEl.value)||0));
-      if (stake > balance) { alert("Solde insuffisant."); return null; }
-      balance -= stake; updateBalance();
-      return stake;
-    }
-
-    let stakeLocked = 0; // stake for current round
 
     function startRound(){
-      if (inRound) return;
-      const s = placeBet();
-      if (s == null) return;
-      stakeLocked = s;
-      crashed = false; cashed = false; inRound = true; round++;
-      crashPoint = sampleCrash(1);
-      crashAtEl.textContent = `${fmt(crashPoint)}×`;
-      setMult(1.00);
-      setStatus('En cours…', 'play');
-      startedAt = performance.now();
-      lockControls(true);
+      if(inRound)return;
+      const stake=Number(stakeEl.value)||0;
+      if(stake>balance){alert('Solde insuffisant');return;}
+      balance-=stake;updateBalance();
+      inRound=true;crashed=false;cashed=false;
+      crashPoint=nextCrashPoint();
+      setMult(1.0);
+      statusEl.textContent='En cours…';
+      startBtn.disabled=true;cashBtn.disabled=false;
+      let start=performance.now();
+      function loop(){
+        raf=requestAnimationFrame(loop);
+        const t=(performance.now()-start)/1000;
+        // croissance exponentielle plus nerveuse sans dépasser trop vite
+        const m=Math.exp(0.9*t); // croissance
+        setMult(m);
+        if(m>=crashPoint){onCrash();}
+      }
       loop();
     }
 
-    function loop(){
-      raf = requestAnimationFrame(loop);
-      const t = (performance.now() - startedAt) / 1000;
-      const m = Math.exp(SPEED * t);
-      setMult(m);
-
-      // Move rocket up to ~ arena height proportionally to progress towards crash
-      const arenaH = arenaEl.clientHeight - 56 - 48; // 56 rocket, 48 ground
-      const progress = Math.min(1, Math.log(m) / Math.log(crashPoint));
-      const y = (1 - progress) * (arenaH - 6) + 6; // padding
-      rocketEl.style.bottom = `${48 + (progress * arenaH)}px`;
-      trailEl.style.height = `${(progress * arenaH)}px`;
-
-      // Auto cash‑out
-      if (!cashed && autoEl.checked){
-        const target = Math.max(1, Number(autoAtEl.value)||2);
-        if (m >= target) doCashout();
-      }
-
-      // Crash
-      if (m >= crashPoint){
-        onCrash();
-      }
-    }
-
     function onCrash(){
-      if (!inRound) return;
+      if(!inRound)return;
       cancelAnimationFrame(raf);
-      inRound = false; crashed = true;
+      inRound=false;crashed=true;
       setMult(crashPoint);
-      setStatus('CRASH 💥', 'crash');
+      statusEl.textContent='💥 CRASH';
       pushHistory(crashPoint);
-      beepCrash();
-      cashBtn.disabled = true; startBtn.disabled = false; stakeEl.disabled = false; autoEl.disabled = false; autoAtEl.disabled = !autoEl.checked;
+      startBtn.disabled=false;cashBtn.disabled=true;
     }
 
     function doCashout(){
-      if (!inRound || crashed || cashed) return;
-      cashed = true;
-      const payout = stakeLocked * currentMult;
-      balance += Math.floor(payout);
+      if(!inRound||cashed||crashed)return;
+      cashed=true;
+      const stake=Number(stakeEl.value)||0;
+      const win=stake*currentMult*0.99; // rake 1%
+      balance+=Math.floor(win);
       updateBalance();
-      setStatus(`Retiré à ${fmt(currentMult)}× ✅`, 'cashed');
-      cashBtn.disabled = true;
+      statusEl.textContent='✅ Retiré à '+currentMult.toFixed(2)+'×';
+      cashBtn.disabled=true;
     }
 
-    function resetAll(){
-      if (inRound) cancelAnimationFrame(raf);
-      inRound = false; crashed = false; cashed = false; setMult(1.0);
-      setStatus('Prêt', ''); crashPoint = null; crashAtEl.textContent = '—';
-      lockControls(false);
-      seed = (crypto.getRandomValues(new Uint32Array(1))[0]) >>> 0; rng = mulberry32(seed);
+    function reset(){
+      if(inRound)cancelAnimationFrame(raf);
+      inRound=false;cashed=false;crashed=false;
+      setMult(1.0);statusEl.textContent='Prêt';
+      startBtn.disabled=false;cashBtn.disabled=true;
     }
 
-    // Events
-    startBtn.addEventListener('click', startRound);
-    cashBtn.addEventListener('click', doCashout);
-    resetBtn.addEventListener('click', resetAll);
-    autoEl.addEventListener('change', ()=>{ autoAtEl.disabled = !autoEl.checked; });
+    function updateBalance(){balanceEl.textContent=balance;}
 
-    // Init
-    updateBalance();
-    autoAtEl.disabled = true;
+    startBtn.onclick=startRound;
+    cashBtn.onclick=doCashout;
+    resetBtn.onclick=reset;
   </script></body>
-            </html>
+</html>
